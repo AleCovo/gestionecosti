@@ -5,19 +5,30 @@
         <meta charset="UTF-8">
          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     </head>
-    <body style="display: block; margin: 0 auto;margin-top: 20px;">
-        <form id="acquisto">
-            <label>Oggetto acquistato: <input type="text" id="object"></label><br><br>
-            <label>Data d'acquisto: <input type="date" id="buyDate"></label><br><br>
-            <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
-            <label>Importo d'acquisto: <input type="number" id="buyAmount"></label><br><br>
-            <label>Importo di vendita: <input type="number" id="sellAmount"></label><br><br>
-            <button type="submit">Inserisci</button>
-        </form>
+    <body>
 
-        <button onclick=""></button>
+        <div id="sidebar">
+            <h3>Menu</h3>
+            <button onclick="alert('Hai cliccato pulsante 1')">Pulsante 1</button>
+            <button onclick="alert('Hai cliccato pulsante 2')">Pulsante 2</button>
+        </div>
+
+        <!-- TOGGLE MENU (mobile) -->
+        <button id="toggleBtn" onclick="toggleSidebar()">☰</button>
+
+        <div id="main">
+            <form id="acquisto">
+                <label>Oggetto acquistato: <input type="text" id="object"></label><br><br>
+                <label>Data d'acquisto: <input type="date" id="buyDate"></label><br><br>
+                <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
+                <label>Importo d'acquisto: <input type="number" id="buyAmount"></label><br><br>
+                <label>Importo di vendita: <input type="number" id="sellAmount"></label><br><br>
+                <button type="submit">Inserisci</button>
+            </form>
+        </div>
 
         <script>
+
 
             let testo = []; // Qui salviamo tutte le righe del file
 
@@ -60,6 +71,10 @@
                 alert(testo);
 
                 });
+            
+            function home(){
+                window.location.href = 'index.html';
+            }
         </script>
     </body>
 </html>
