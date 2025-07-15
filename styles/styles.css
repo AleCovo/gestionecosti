@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+}
+
+/* Header */
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Layout base */
+.main {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: #eee;
+  padding: 15px;
+}
+
+.content {
+  flex: 3;
+  padding: 15px;
+}
+
+/* Tablet (max 992px) */
+@media screen and (max-width: 992px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .content {
+    width: 100%;
+  }
+}
+
+/* Smartphone (max 600px) */
+@media screen and (max-width: 600px) {
+  header {
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .sidebar,
+  .content {
+    padding: 10px;
+  }
+}
