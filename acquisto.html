@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/styles.css">
+        <title>ACQUISTO</title>
+        <meta charset="UTF-8">
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    </head>
+    <body>
+        <form id="acquisto" style="margin-left: 45%;">
+            <label>Oggetto acquistato: <input type="text" id="object"></label><br><br>
+            <label>Data d'acquisto: <input type="date" id="buyDate"></label><br><br>
+            <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
+            <label>Importo d'acquisto: <input type="number" id="buyAmount"></label><br><br>
+            <label>Importo di vendita: <input type="number" id="sellAmount"></label><br><br>
+            <button type="submit">Inserisci</button>
+        </form>
+
+
+        <script>
+
+            let testo = []; // Qui salviamo tutte le righe del file
+
+            // Carica dati.txt dalla root
+            window.addEventListener('DOMContentLoaded', () => {
+            fetch('gestionecosti.txt')
+                .then(response => {
+                if (!response.ok) throw new Error('File dati.txt non trovato nella root');
+                return response.text();
+                })
+                .then(text => {
+                testo = text.trim().split('\n');
+                alert("File dati.txt caricato con successo!");
+                
+                })
+                .catch(error => {
+                alert("Errore nel caricamento del file: " + error.message);
+                });
+
+            });
+
+
+
+           document.getElementById('acquisto').addEventListener('submit', function (e) {
+                e.preventDefault();
+                // Recupera i dati dal form
+                
+                const index = (testo.length + 1).toString();
+                const object = document.getElementById('object').value;
+                const buyDate = document.getElementById('buyDate').value;
+                const sellDate = document.getElementById('sellDate').value;
+                const buyAmount = document.getElementById('buyAmount').value;
+                const sellAmount = document.getElementById('sellAmount').value;
+
+                const nuovaLinea = `\n${index},${object},${buyDate},${sellDate},${buyAmount},${sellAmount}`;
+                testo.push(nuovaLinea);
+
+                document.getElementById('acquisto').reset();
+                alert("Riga aggiunta al file!");
+                alert(testo);
+
+                });
+        </script>
+    </body>
+</html>
