@@ -1,67 +1,67 @@
+/* Stili base */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  padding: 1rem;
   background-color: #f2f2f2;
 }
 
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-  background-color: white;
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-/* Header */
-header {
+/* Form container */
+form {
+  max-width: 500px;
+  margin: auto;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Input fields */
+input[type="text"],
+input[type="date"],
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+/* Button */
+button {
+  padding: 0.75rem 1.2rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
   background-color: #007bff;
   color: white;
-  padding: 20px;
-  text-align: center;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-/* Layout base */
-.main {
-  display: flex;
-  gap: 20px;
+button:hover {
+  background-color: #0056b3;
 }
 
-.sidebar {
-  flex: 1;
-  background-color: #eee;
-  padding: 15px;
-}
-
-.content {
-  flex: 3;
-  padding: 15px;
-}
-
-/* Tablet (max 992px) */
-@media screen and (max-width: 992px) {
-  .main {
-    flex-direction: column;
+/* Responsive layout */
+@media (max-width: 600px) {
+  form {
+    padding: 1rem;
   }
 
-  .sidebar,
-  .content {
-    width: 100%;
-  }
-}
-
-/* Smartphone (max 600px) */
-@media screen and (max-width: 600px) {
-  header {
+  h2 {
     font-size: 1.2rem;
-    padding: 15px;
   }
 
-  .container {
-    padding: 10px;
-  }
-
-  .sidebar,
-  .content {
-    padding: 10px;
+  button {
+    width: 100%;
+    margin-top: 1rem;
   }
 }
