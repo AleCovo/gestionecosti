@@ -59,14 +59,26 @@
                 const buyAmount = document.getElementById('buyAmount').value;
                 const sellAmount = document.getElementById('sellAmount').value;
 
-                const nuovaLinea = `\n${index},${object},${buyDate},${sellDate},${buyAmount},${sellAmount}`;
-                testo.push(nuovaLinea);
 
-                document.getElementById('acquisto').reset();
-                alert("Riga aggiunta al file!");
-                alert(testo);
-
+                //mandare i dati del form al server
+                
+                fetch('/scrivi', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ index, object, buyDate, sellDate, buyAmount, sellAmount })
+                })
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg);
+                    document.getElementById('acquisto').reset();
+                })
+                .catch(err => {
+                    alert('Errore nell\'invio dei dati');
                 });
+
+            });
             
             function home(){
                 window.location.href = 'index.html';
