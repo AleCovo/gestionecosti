@@ -1,31 +1,24 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware
+app.use(express.static(__dirname));
 app.use(express.json());
-app.use(express.static('pagine')); // serve la directory 
+app.use(express.urlencoded({ extended: true }));
 
-// Endpoint per scrivere su dati.txt
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.post('/scrivi', (req, res) => {
-  alert("Conessione server");
-  const { index, object, buyDate, sellDate, buyAmount, sellAmount } = req.body;
-
-  const nuovaLinea = `\n${index},${object},${buyDate},${sellDate},${buyAmount},${sellAmount}`;
-
-  fs.appendFile(path.join(__dirname, 'gestionecosti.txt'), nuovaLinea, err => {
-    if (err) {
-      console.error('Errore scrittura file:', err);
-      return res.status(500).send('Errore scrittura file');
-    }
-    res.send('Riga aggiunta con successo!');
+  const { object, buyDate, sellDate, buyAmount, sellAmount } = req.body;
+  const riga = `${object}, ${buyDate}, ${sellDate}, ${buyAmount}, ${sellAmount}\n`;
+  fs.appendFile('dati.txt', riga, (err) => {
+    if (err) return res.status(500).send('Errore nel salvataggio');
+    res.send('Dati salvati');
   });
 });
 
-// Avvia server
-app.listen(PORT, () => {
-  console.log(`✅ Server avviato su http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server in esecuzione su http://localhost:${PORT}`));

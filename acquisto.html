@@ -13,7 +13,7 @@
 
 
         <div id="main">
-            <form id="acquisto">
+            <form id="acquisto" action="" method="post">
                 <label>Oggetto acquistato: <input type="text" id="object"></label><br><br>
                 <label>Data d'acquisto: <input type="date" id="buyDate"></label><br><br>
                 <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
@@ -47,7 +47,7 @@
             });
 
 
-
+           
            document.getElementById('acquisto').addEventListener('submit', function (e) {
                 e.preventDefault();
                 // Recupera i dati dal form
@@ -62,7 +62,9 @@
                 
                 //mandare i dati del form al server
                 
-                fetch('/scrivi', {
+                const SERVER_URL = 'https://gestionecosti.onrender.com';
+
+                fetch(`${SERVER_URL}/scrivi`, {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json'
