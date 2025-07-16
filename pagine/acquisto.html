@@ -59,7 +59,7 @@
                 const buyAmount = document.getElementById('buyAmount').value;
                 const sellAmount = document.getElementById('sellAmount').value;
 
-
+                
                 //mandare i dati del form al server
                 
                 fetch('/scrivi', {
@@ -71,7 +71,7 @@
                 })
                 .then(res => res.text())
                 .then(msg => {
-                    alert(msg);
+                    alert("Dati inviati al server");
                     document.getElementById('acquisto').reset();
                 })
                 .catch(err => {

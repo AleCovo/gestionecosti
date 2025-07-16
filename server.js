@@ -7,10 +7,11 @@ const PORT = 3000;
 
 // Middleware
 app.use(express.json());
-app.use(express.static('public')); // serve index.html
+app.use(express.static('pagine')); // serve la directory 
 
 // Endpoint per scrivere su dati.txt
 app.post('/scrivi', (req, res) => {
+  alert("Conessione server");
   const { index, object, buyDate, sellDate, buyAmount, sellAmount } = req.body;
 
   const nuovaLinea = `\n${index},${object},${buyDate},${sellDate},${buyAmount},${sellAmount}`;
