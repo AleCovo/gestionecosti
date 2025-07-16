@@ -40,9 +40,9 @@
                 
                 //mandare i dati del form al server
                 
-                const SERVER_URL = 'https://localhost:3000';
+                const SERVER_URL = 'https://gestionecosti.vercel.app:3000';
 
-                fetch(`/scrivi`, {
+                fetch(`${SERVER_URL}/scrivi`, {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json'

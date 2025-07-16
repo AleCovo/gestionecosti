@@ -55,4 +55,4 @@ app.post('/scrivi', (req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Server in esecuzione su http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server in esecuzione`));
