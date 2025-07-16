@@ -26,33 +26,11 @@
         <script>
 
 
-            let testo = []; // Qui salviamo tutte le righe del file
-
-            // Carica dati.txt dalla root
-            window.addEventListener('DOMContentLoaded', () => {
-            fetch('gestionecosti.txt')
-                .then(response => {
-                if (!response.ok) throw new Error('File dati.txt non trovato nella root');
-                return response.text();
-                })
-                .then(text => {
-                testo = text.trim().split('\n');
-                alert("File dati.txt caricato con successo!");
-                
-                })
-                .catch(error => {
-                alert("Errore nel caricamento del file: " + error.message);
-                });
-
-            });
-
-
            
            document.getElementById('acquisto').addEventListener('submit', function (e) {
                 e.preventDefault();
                 // Recupera i dati dal form
-                
-                const index = (testo.length + 1).toString();
+
                 const object = document.getElementById('object').value;
                 const buyDate = document.getElementById('buyDate').value;
                 const sellDate = document.getElementById('sellDate').value;
@@ -62,14 +40,14 @@
                 
                 //mandare i dati del form al server
                 
-                const SERVER_URL = 'https://gestionecosti.onrender.com';
+                const SERVER_URL = 'https://localhost:3000';
 
-                fetch(`${SERVER_URL}/scrivi`, {
+                fetch(`/scrivi`, {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ index, object, buyDate, sellDate, buyAmount, sellAmount })
+                    body: JSON.stringify({ object, buyDate, sellDate, buyAmount, sellAmount })
                 })
                 .then(res => res.text())
                 .then(msg => {
@@ -83,7 +61,7 @@
             });
             
             function home(){
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }
         </script>
     </body>
