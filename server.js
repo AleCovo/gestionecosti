@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { text } = require('stream/consumers');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 //permette di inserire i css nelle pagine html (HTML, CSS, immagini, ecc.) dalla cartella "public"
 app.use(express.static(path.join(__dirname, 'public')));
@@ -55,4 +55,4 @@ app.post('/scrivi', (req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Server in esecuzione`));
+app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
