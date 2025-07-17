@@ -45,10 +45,19 @@ app.get('/acquisto', (req, res) => {
 });
 
 
+app.get('/pagRiepilogo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/riepilogo.html'));
+});
+
+app.get('/riepilogo', (req, res) => {
+  res.json(testo); // Invia l'array con le righe lette dal file
+});
+
+
 //lancia l'API per aggiungere gli acquisti
 app.post('/scrivi', (req, res) => {
-  const { object, buyDate, sellDate, buyAmount, sellAmount } = req.body;
-  const riga = `\n${index},${object},${buyDate},${sellDate},${buyAmount},${sellAmount}`;
+  const { object, orderNum, buyDate, sellDate, buyAmount, sellAmount } = req.body;
+  const riga = `\n${index},${object},${orderNum},${buyDate},${sellDate},${buyAmount},${sellAmount}`;
   fs.appendFile('public/gestionecosti.txt', riga, (err) => {
     if (err) return res.status(500).send('Errore nel salvataggio');
     res.send('Dati salvati');

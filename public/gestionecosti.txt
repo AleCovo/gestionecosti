@@ -1,3 +1,2 @@
-1,Xbox SeriesX,15/07/2025,null,230,0
-2,PS5 Slim,13/07/2025,null,250,0
-3, Cazzo figa culo, 2025-07-01, , 200, 
+1,Xbox SeriesX,14,15/07/2025,null,230,0
+2,PS5 Slim,14,13/07/2025,null,250,0

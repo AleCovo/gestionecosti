@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/styles.css">
+        <title>RIEPILOGO</title>
+        <meta charset="UTF-8">
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    </head>
+    <body>
+        <h1>Riepilogo Spese</h1>
+        <table id="riepilogo-table">
+            <thead>
+                <tr>
+                    <th>Indice</th>
+                    <th>Oggetto</th>
+                    <th>Numero Ordine</th>
+                    <th>Data d'acquisto</th>
+                    <th>Data di vendita</th>
+                    <th>Importo d'acquisto</th>
+                    <th>Importo di vendita</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Le righe verranno aggiunte qui dinamicamente -->
+            </tbody>
+        </table>
+
+        <script>
+            fetch('/riepilogo')
+                .then(res => res.json())
+                .then(testo => {
+                    const tbody = document.querySelector('#riepilogo-table tbody');
+
+                    testo.forEach(riga => {
+                        riga = riga.split(',');
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${riga[0]}</td>
+                            <td>${riga[1]}</td>
+                            <td>${riga[2]}</td>
+                            <td>${riga[3]}</td>
+                            <td>${riga[4]}</td>
+                            <td>${riga[5]}</td>
+                            <td>${riga[6]}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        </script>
+    </body>
+</html>

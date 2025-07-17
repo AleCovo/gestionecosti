@@ -6,6 +6,11 @@ body {
   background-color: #f2f2f2;
 }
 
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
 h2 {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -48,6 +53,39 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/*Tabelle*/
+thead {
+  background-color: #004080;
+  color: white;
+  text-align: left;
+}
+
+thead th {
+  padding: 12px 16px;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+  background-color: #e0f0ff;
+}
+
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
 }
 
 /* Responsive layout */

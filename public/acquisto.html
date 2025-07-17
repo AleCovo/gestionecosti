@@ -11,10 +11,12 @@
             <button onclick="home()">Home</button>
         </div>
 
+        
 
         <div id="main">
             <form id="acquisto" action="" method="post">
                 <label>Oggetto acquistato: <input type="text" id="object"></label><br><br>
+                <label>Numero ordine: <input type="text" id="orderNum"></label><br><br>
                 <label>Data d'acquisto: <input type="date" id="buyDate"></label><br><br>
                 <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
                 <label>Importo d'acquisto: <input type="number" id="buyAmount"></label><br><br>
@@ -32,36 +34,39 @@
                 // Recupera i dati dal form
 
                 const object = document.getElementById('object').value;
+                const orderNum = document.getElementById('orderNum').value;
                 const buyDate = document.getElementById('buyDate').value;
                 const sellDate = document.getElementById('sellDate').value;
                 const buyAmount = document.getElementById('buyAmount').value;
                 const sellAmount = document.getElementById('sellAmount').value;
 
-                
-                //mandare i dati del form al server
-                
-                const SERVER_URL = 'https://gestionecosti.vercel.app:3000';
-
-                fetch(`/scrivi`, {
+                // Invia i dati al server
+                fetch('/scrivi', {
                     method: 'POST',
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ object, buyDate, sellDate, buyAmount, sellAmount })
+                    body: JSON.stringify({ object, orderNum, buyDate, sellDate, buyAmount, sellAmount })
                 })
                 .then(res => res.text())
                 .then(msg => {
-                    alert("Dati inviati al server");
+                    alert(msg);
                     document.getElementById('acquisto').reset();
                 })
                 .catch(err => {
+                    console.error(err);
                     alert('Errore nell\'invio dei dati');
                 });
-
             });
+                
             
+             
             function home(){
                 window.location.href = '/';
+            }
+
+            function riepilogo(){
+                window.location.href = '/riepilogo';
             }
         </script>
     </body>
