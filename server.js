@@ -31,7 +31,7 @@ console.log('Indice per il nuovo acquisto:', index);
 
 
 
-app.listen(PORT);
+app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
 
 //lancia pagina principale
 app.get('/', (req, res) => {
@@ -63,5 +63,3 @@ app.post('/scrivi', (req, res) => {
     res.send('Dati salvati');
   });
 });
-
-app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
