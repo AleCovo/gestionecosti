@@ -10,13 +10,16 @@
         <table id="riepilogo-table">
             <thead>
                 <tr>
-                    <th>Indice</th>
-                    <th>Oggetto</th>
-                    <th>Numero Ordine</th>
-                    <th>Data d'acquisto</th>
-                    <th>Data di vendita</th>
-                    <th>Importo d'acquisto</th>
-                    <th>Importo di vendita</th>
+                    <th>Data</th>
+                    <th>Ordine</th>
+                    <th>Articolo</th>
+                    <th>Codice</th>
+                    <th>Descrizione</th>
+                    <th>Costo (€)</th>
+                    <th>Ricavo (€)</th>
+                    <th>Venduto</th>
+                    <th>Guadagno (€)</th>
+                    <th>Mese</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +43,10 @@
                             <td>${riga[3]}</td>
                             <td>${riga[4]}</td>
                             <td>${riga[5]}</td>
-                            <td>${riga[6]}</td>
+                            <td>${riga[6]} €</td>
+                            <td>${riga[7]} </td>
+                            <td>${riga[8]} €</td>
+                            <td>${riga[9]}</td>
                         `;
                         tbody.appendChild(tr);
                     });

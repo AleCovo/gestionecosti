@@ -7,16 +7,19 @@
     </head>
     <body >
 
+        <button onclick="pagRiepilogo()">Vedi riepilogo</button>
+        <button onclick="caricaForm()">Carica Form</button>
+        <br>
+        <br>
         <h1>Form di acquisto</h1>
         
         <div id="main">
             <form id="acquisto" action="" method="post">
-                <label>Oggetto acquistato: <input type="text" id="object"></label><br><br>
-                <label>Numero ordine: <input type="text" id="orderNum"></label><br><br>
-                <label>Data d'acquisto: <input type="date" id="buyDate"></label><br><br>
-                <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
-                <label>Importo d'acquisto: <input type="number" id="buyAmount"></label><br><br>
-                <label>Importo di vendita: <input type="number" id="sellAmount"></label><br><br>
+                <label>Data: <input type="date" id="data"></label><br><br>
+                <label>Ordine: <input type="text" id="ordine"></label><br><br>
+                <label>Articolo: <input type="text" id="articolo"></label><br><br>
+                <label>Descrizione: <input type="text" id="descrizione"></label><br><br>
+                <label>Costo (€): <input type="number" id="costo"></label><br><br>
                 <button type="submit">Inserisci</button>
             </form>
         </div>
@@ -27,16 +30,12 @@
         <br>
         <div>
             <form id="vendita" action="" method="post">
-                <label>Numero ordine: <input type="text" id="orderNum"></label><br><br>
-                <label>Data di vendita: <input type="date" id="sellDate"></label><br><br>
-                <label>Importo di vendita: <input type="number" id="sellAmount"></label><br><br>
+                <label>Codice: <input type="text" id="codice"></label><br><br>
+                <label>Ricavo: <input type="number" id="ricavo"></label><br><br>
                 <button type="submit">Inserisci</button>
             </form>
         </div>
 
-        <br>
-        <br>
-        <button onclick="pagRiepilogo()">Vedi riepilogo</button>
 
         <script>
 
@@ -44,20 +43,19 @@
                 e.preventDefault();
                 // Recupera i dati dal form
 
-                const object = document.getElementById('object').value;
-                const orderNum = document.getElementById('orderNum').value;
-                const buyDate = document.getElementById('buyDate').value;
-                const sellDate = document.getElementById('sellDate').value;
-                const buyAmount = document.getElementById('buyAmount').value;
-                const sellAmount = document.getElementById('sellAmount').value;
+                const data = document.getElementById('data').value;
+                const ordine = document.getElementById('ordine').value;
+                const articolo = document.getElementById('articolo').value;
+                const descrizione = document.getElementById('descrizione').value;
+                const costo = document.getElementById('costo').value;
 
                 // Invia i dati al server
-                fetch('/scrivi', {
+                fetch('/acquisto', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ object, orderNum, buyDate, sellDate, buyAmount, sellAmount })
+                    body: JSON.stringify({ data, ordine, articolo, descrizione, costo})
                 })
                 .then(res => res.text())
                 .then(msg => {
@@ -74,17 +72,16 @@
                 e.preventDefault();
                 // Recupera i dati dal form
 
-                const orderNum = document.getElementById('orderNum').value;
-                const sellDate = document.getElementById('sellDate').value;
-                const sellAmount = document.getElementById('sellAmount').value;
+                const codice = document.getElementById('codice').value;
+                const ricavo = document.getElementById('ricavo').value;
 
                 // Invia i dati al server
-                fetch('/scrivi', {
+                fetch('/vendita', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ orderNum, sellDate, sellAmount })
+                    body: JSON.stringify({ codice, ricavo })
                 })
                 .then(res => res.text())
                 .then(msg => {
@@ -96,19 +93,21 @@
                     alert('Errore nell\'invio dei dati');
                 });
             });
-                
-            
-             
-            function home(){
-                window.location.href = '/';
-            }
-
-            function riepilogo(){
-                window.location.href = '/riepilogo';
-            }
 
             function pagRiepilogo(){
-               window.location.href = `/pagRiepilogo`;
+                window.location.href = `/pagRiepilogo`;
+            }
+
+            function caricaForm(){
+
+                fetch('/caricaForm')
+                    .then(res => res.json())
+                    .then(righe => {
+                        const campo = righe.split(',');
+                        const form = document.getElementById('acquisto');
+                        form.ordine.value = campo[1];
+                        form.articolo.value = campo[2];
+                    });
             }
 
         </script>
