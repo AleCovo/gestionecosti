@@ -6,19 +6,14 @@ body {
   background-color: #f2f2f2;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-h2 {
+h1, h2 {
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
 /* Form container */
 form {
-  max-width: 500px;
+  max-width: 600px;
   margin: auto;
   background-color: white;
   padding: 1.5rem;
@@ -26,35 +21,68 @@ form {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Input fields */
+/* Righe del form */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Ogni campo (etichetta + input) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 120px;
+}
+
+.form-group.wide {
+  flex: 2;
+}
+
+/* Input */
 input[type="text"],
 input[type="date"],
 input[type="number"] {
   width: 100%;
   padding: 0.75rem;
-  margin: 0.5rem 0 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
-  box-sizing: border-box;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
-/* Button */
-button {
+/* Bottoni */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.button-group button {
+  flex: none;
   padding: 0.75rem 1.2rem;
-  margin-top: 0.5rem;
   font-size: 1rem;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-button:hover {
+.button-group button:hover {
   background-color: #0056b3;
 }
 
+.button-group button:active {
+  transform: scale(0.98);
+}
+
+/* Tabelle (se usi riepiloghi) */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -64,15 +92,15 @@ table {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/*Tabelle*/
 thead {
   background-color: #004080;
   color: white;
   text-align: left;
 }
 
-thead th {
+thead th, tbody td {
   padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
 }
 
 tbody tr:nth-child(even) {
@@ -83,23 +111,18 @@ tbody tr:hover {
   background-color: #e0f0ff;
 }
 
-tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #ddd;
-}
-
 /* Responsive layout */
 @media (max-width: 600px) {
-  form {
-    padding: 1rem;
+  .form-row {
+    flex-direction: column;
   }
 
-  h2 {
-    font-size: 1.2rem;
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  button {
+  .button-group button {
     width: 100%;
-    margin-top: 1rem;
   }
 }

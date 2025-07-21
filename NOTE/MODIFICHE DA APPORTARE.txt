@@ -1,0 +1,47 @@
+il codice deve diventare la concatenzione di anno-ordine-articolo
+
+
+aggiungere uno script di modifica righe sia per vendita che per costo (vendita ho già), cercare di farlo il più semplice possibile e se si riesce modificare il campo con un doppio click
+
+rinominare riepilogo spese con riepilogo e poi togliere dalla vista ordine, articolo, mese e venduto
+quindi alla fine tenere data, codice, descrizione, costo, ricavo e guadagno
+
+aggiungere un bottone di download su exel
+
+
+migliorare la leggibilità da telefono, ingrandendo la schermata e spostando i 2 bottoni in alto al centro.
+
+Modificare il form di acquisto e vendita:
+guardando lo stamp  "FORM DI INSERIMENTO", 
+
+il form di acquisto avrà:
+
+una data che se lasciata blank viene impostata come automatica oggi, altrimenti prende il valore inserito a mano
+un ordine blank
+un articolo, blank
+una descrizione
+un costo
+un pulsante più articoli che mi storicizza l'acquisto, mantiene i dati inseriti (aumenta l'articolo di uno) nel form ma sbianca descrizione e costo per nuovi inserimenti
+un pulsante termine acquisto per aggiungere l'utimo oggetto e sbiancare tutto il form
+
+
+il form di vendita avrà:
+
+un codice
+una descrrizione
+un ricavo
+un importo
+un inserisci
+
+il codice e la descrizione devono essere delle tendine popolate con gli oggetti che sono stati acquistati e che devono quindi essere venduti.
+
+
+
+Nello stamp "Tabelle riassuntive", creare una pagina che contiene tutto ma togliere la prima tabella dei totali
+
+
+
+creare una pagina login per non permettere a nessuno di entrare tranne a chi ha utente e password per accedere
+
+
+modificare label dei form in compra e vendi e inserire ilsimbolo dell'euro in tutti gli importi
