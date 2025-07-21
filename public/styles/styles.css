@@ -6,14 +6,19 @@ body {
   background-color: #f2f2f2;
 }
 
-h1, h2 {
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
 /* Form container */
 form {
-  max-width: 600px;
+  max-width: 500px;
   margin: auto;
   background-color: white;
   padding: 1.5rem;
@@ -21,39 +26,99 @@ form {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Righe del form */
-.form-row {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-/* Ogni campo (etichetta + input) */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 120px;
-}
-
-.form-group.wide {
-  flex: 2;
-}
-
-/* Input */
+/* Input fields */
 input[type="text"],
 input[type="date"],
 input[type="number"] {
   width: 100%;
   padding: 0.75rem;
+  margin: 0.5rem 0 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 1rem;
   box-sizing: border-box;
+  font-size: 1rem;
 }
 
-/* Bottoni */
+/* Button */
+button {
+  padding: 0.75rem 1.2rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/*Tabelle*/
+thead {
+  background-color: #004080;
+  color: white;
+  text-align: left;
+}
+
+thead th {
+  padding: 12px 16px;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+  background-color: #e0f0ff;
+}
+
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+  form {
+    padding: 1rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="number"] {
+    font-size: 1.1rem;
+  }
+}
+
+/* Stili per i bottoni e le righe del form */
 .button-group {
   display: flex;
   justify-content: center;
@@ -82,47 +147,27 @@ input[type="number"] {
   transform: scale(0.98);
 }
 
-/* Tabelle (se usi riepiloghi) */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
-thead {
-  background-color: #004080;
-  color: white;
-  text-align: left;
+.form-row input {
+  width: auto; /* Imposta la larghezza automatica per gli input */
+  flex: 1 1 0;
+  min-width: 100px;
+  box-sizing: border-box;
 }
 
-thead th, tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #ddd;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 100px;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tbody tr:hover {
-  background-color: #e0f0ff;
-}
-
-/* Responsive layout */
-@media (max-width: 600px) {
-  .form-row {
-    flex-direction: column;
-  }
-
-  .button-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .button-group button {
-    width: 100%;
-  }
+.form-group.wide {
+  flex: 2;
 }
