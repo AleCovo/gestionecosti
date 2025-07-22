@@ -13,6 +13,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+function leggiFile(filePath) {
+    const file = fs.readFileSync(filePath, 'utf-8');
+    return file;
+}
 
 function estraiMeseAnno(dataInput) {
   const data = new Date(dataInput);
@@ -21,6 +25,11 @@ function estraiMeseAnno(dataInput) {
   return `${mese}/${anno}`;
 }
 
+function estraiAnno(dataInput) {
+  const data = new Date(dataInput);
+  const anno = data.getFullYear();
+  return anno;
+}
 
 // Leggi il file all'avvio del server
 const filePath = path.join(__dirname, 'public/gestionecosti.txt');
@@ -28,12 +37,7 @@ let file = '';
 let righe = [];
 let numRiga = 0;
 
-try {
-  file = fs.readFileSync(filePath, 'utf-8');
-  console.log('Contenuto del file:', file);
-} catch (err) {
-  console.error('Errore nella lettura del file:', err);
-}
+file = leggiFile(filePath);
 
 righe = file.split('\n');
 
@@ -47,18 +51,31 @@ app.get('/', (req, res) => {
 });
 
 app.get('/caricaForm', (req, res) => {
-  
-  
-  try {
-    file = fs.readFileSync(filePath, 'utf-8');
-  } catch (err) {
-    console.error('Errore nella lettura del file:', err);
-  }
-
-  righe = file.split('\n');
-  res.json(righe[righe.length - 1]);
+  const file = leggiFile(filePath);
+  const righe = file.split('\n');
+  let righeNonVendute = [];
+  righe.forEach((riga) => {
+    const campo = riga.split(',');
+    if (campo[7] === 'FALSO') {
+      righeNonVendute.push(riga + '\n');
+    }
+  });
+  res.json(righeNonVendute);
 });
 
+app.get('/caricaSelezioneVendita', (req, res) => {
+  const file = leggiFile(filePath);
+  const righe = file.split('\n');
+  
+  let righeNonVendute = [];
+  righe.forEach((riga) => {
+    const campo = riga.split(',');
+    if (campo[7] === 'FALSO') {
+      righeNonVendute.push(riga + '\n');
+    }
+  });
+  res.json(righeNonVendute);
+});
 
 //lancia pagina per aggiungere gli acquisti
 app.get('/pagAcquisto', (req, res) => {
@@ -71,23 +88,22 @@ app.get('/pagRiepilogo', (req, res) => {
 });
 
 app.get('/riepilogo', (req, res) => {
-  try {
-    file = fs.readFileSync(filePath, 'utf-8');
-  } catch (err) {
-    console.error('Errore nella lettura del file:', err);
-  }
+  const file = leggiFile(filePath);
 
-  righe = file.split('\n');
-
+  const righe = file.split('\n');
 
   res.json(righe); // Invia l'array con le righe lette dal file
 });
 
 
 //lancia l'API per aggiungere gli acquisti
-app.post('/acquisto', (req, res) => {
-  const data = req.body.data;
 
+app.post('/aggiungiArticolo', (req, res) => {
+
+  let data = req.body.data;
+  if (data === undefined || data === '') {
+    data = new Date().toISOString().split('T')[0]; // Imposta la data corrente se non fornita
+  }
 
   //logica di aggiunta zeri ad origine e articolo
   const ordine = req.body.ordine;
@@ -111,7 +127,54 @@ app.post('/acquisto', (req, res) => {
     veroArticolo = articolo;
   }
 
-  const codice = veroOrdine + veroArticolo;
+  const anno = estraiAnno(data);
+  const codice = anno +veroOrdine + veroArticolo;
+  const descrizione = req.body.descrizione;
+  const costo = req.body.costo;
+
+  const mese = estraiMeseAnno(data);
+  
+
+  const riga = `\n${data},${veroOrdine},${veroArticolo},${codice},${descrizione},${costo},0,FALSO,0,${mese}`;
+  fs.appendFile(filePath, riga, (err) => {
+    if (err) return res.status(500).send('Errore nel salvataggio');
+    const aggiungiArticolo = { veroOrdine, veroArticolo };
+    res.json(aggiungiArticolo); // Invia l'oggetto con ordine e articolo aggiunti
+  });
+});
+
+
+app.post('/terminaAcquisto', (req, res) => {
+
+  let data = req.body.data;
+  if (data === undefined || data === '') {
+    data = new Date().toISOString().split('T')[0]; // Imposta la data corrente se non fornita
+  }
+
+  //logica di aggiunta zeri ad origine e articolo
+  const ordine = req.body.ordine;
+  let veroOrdine = '';
+  if (ordine.length === 1) {
+    veroOrdine = '00' + ordine;
+  }
+  else if (ordine.length === 2) {
+    veroOrdine = '0' + ordine;
+  }
+  else {
+    veroOrdine = ordine;
+  }
+
+  const articolo = req.body.articolo;
+  let veroArticolo = '';
+  if (articolo.length === 1) {
+    veroArticolo = '0' + articolo;
+  }
+  else {
+    veroArticolo = articolo;
+  }
+
+  const anno = estraiAnno(data);
+  const codice = anno +veroOrdine + veroArticolo;
   const descrizione = req.body.descrizione;
   const costo = req.body.costo;
 

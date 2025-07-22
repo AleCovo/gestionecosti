@@ -3,8 +3,8 @@ il codice deve diventare la concatenzione di anno-ordine-articolo
 
 aggiungere uno script di modifica righe sia per vendita che per costo (vendita ho già), cercare di farlo il più semplice possibile e se si riesce modificare il campo con un doppio click
 
-rinominare riepilogo spese con riepilogo e poi togliere dalla vista ordine, articolo, mese e venduto
-quindi alla fine tenere data, codice, descrizione, costo, ricavo e guadagno
+FATTO    rinominare riepilogo spese con riepilogo e poi togliere dalla vista ordine, articolo, mese e venduto
+         quindi alla fine tenere data, codice, descrizione, costo, ricavo e guadagno
 
 aggiungere un bottone di download su exel
 
@@ -32,6 +32,8 @@ una descrrizione
 un ricavo
 un importo
 un inserisci
+
+
 
 il codice e la descrizione devono essere delle tendine popolate con gli oggetti che sono stati acquistati e che devono quindi essere venduti.
 

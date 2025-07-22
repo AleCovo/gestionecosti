@@ -6,13 +6,14 @@
          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     </head>
     <body >
-        
+        <button onclick="pagRiepilogo()">Vedi riepilogo</button>
+        <button onclick="caricaForm()">Carica Form</button>
         <br>
         <br>
         <h1>Form di acquisto</h1>
         
         <div id="main">
-            <form id="acquisto" method="post">
+            <form id="acquisto" action=""method="post">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="data">Data:</label>
@@ -40,8 +41,8 @@
                 </div>    
                     
                 <div class="button-group">
-                    <button type="submit">Aggiungi ordine</button>
-                    <button type="reset">Termina acquisto</button>
+                    <button type="button" id="aggiungiArticolo">Aggiungi articoli</button>
+                    <button type="button" id="terminaAcquisto">Termina acquisto</button>
                 </div>
 
             </form>
@@ -53,16 +54,55 @@
         <br>
         <div>
             <form id="vendita" action="" method="post">
-                <label>Codice: <input type="text" id="codice"></label><br><br>
-                <label>Ricavo: <input type="number" id="ricavo"></label><br><br>
-                <button type="submit">Inserisci</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="data">Codice:</label>
+                        <select id="codiceSelect" name="codice" disabled>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="descrizione">Descrizione:</label>
+                        <select id="descrizioneSelect" name="descrizione" oninput="caricaSelezioneVendita()">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ricavo">Ricavo:</label>
+                        <input style="margin-right: 75%;" type="text" id="ricavo" name="ricavo">
+                    </div>
+                    <div class="button-group">
+                        <button type="submit">Inserisci</button>
+                    </div>
+                </div>
             </form>
         </div>
 
 
         <script>
 
-            document.getElementById('acquisto').addEventListener('submit', function (e) {
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('vendita');
+                fetch('/caricaForm')
+                    .then(res => res.json())
+                    .then(righeNonVendute => {
+                        righeNonVendute.forEach(riga => {
+                            const campo = riga.split(',');
+                            const optionCodice = document.createElement('option');
+                            optionCodice.value = campo[3]; // Codice
+                            optionCodice.textContent = campo[3]; // Descrizione
+                            form.codice.appendChild(optionCodice);
+
+                            const optionDescrizione = document.createElement('option');
+                            optionDescrizione.value = campo[4]; // Descrizione
+                            optionDescrizione.textContent = campo[4]; // Descrizione
+                            form.descrizione.appendChild(optionDescrizione);
+                        });
+                    });
+            });
+
+
+            document.getElementById('aggiungiArticolo').addEventListener('click', function (e) {
                 e.preventDefault();
                 // Recupera i dati dal form
 
@@ -73,7 +113,40 @@
                 const costo = document.getElementById('costo').value;
 
                 // Invia i dati al server
-                fetch('/acquisto', {
+                fetch('/aggiungiArticolo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data, ordine, articolo, descrizione, costo})
+                })
+                .then(res => res.json())
+                    .then(aggiungiArticolo => {
+                        const form = document.getElementById('acquisto');
+                        form.ordine.value = aggiungiArticolo.veroOrdine;
+                        const veroArticolo = parseInt(aggiungiArticolo.veroArticolo) + 1;
+                        form.articolo.value = veroArticolo.toString();
+                        alert('Articolo aggiunto con successo');
+
+                        form.data.value = '';
+                        form.descrizione.value = '';
+                        form.costo.value = '';
+                    });
+            });
+
+
+            document.getElementById('terminaAcquisto').addEventListener('click', function (e) {
+                e.preventDefault();
+                // Recupera i dati dal form
+
+                const data = document.getElementById('data').value;
+                const ordine = document.getElementById('ordine').value;
+                const articolo = document.getElementById('articolo').value;
+                const descrizione = document.getElementById('descrizione').value;
+                const costo = document.getElementById('costo').value;
+
+                // Invia i dati al server
+                fetch('/terminaAcquisto', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -95,7 +168,7 @@
                 e.preventDefault();
                 // Recupera i dati dal form
 
-                const codice = document.getElementById('codice').value;
+                const codice = document.getElementById('codiceSelect').value;
                 const ricavo = document.getElementById('ricavo').value;
 
                 // Invia i dati al server
@@ -121,16 +194,64 @@
                 window.location.href = `/pagRiepilogo`;
             }
 
-            function caricaForm(){
+            function caricaSelezioneVendita() {
+                
+                const form = document.getElementById('vendita');
+                
+                
+                const descrizione = form.descrizioneSelect.value;
+                let veraOpzione = [];
+                let altreOpzioni = [];
+                
+                fetch('/caricaSelezioneVendita')
+                .then(res => res.json())
+                .then(righeNonVendute => {
+                    const veraOpzione = [];
+                    const altreOpzioni = [];
+                    
+                    righeNonVendute.forEach(riga => {
+                        const campo = riga.split(',');
+                        if (campo[7] === 'FALSO') {
+                            
+                            if (campo[4] === descrizione) {
+                                //Cancella le opzioni esistenti
+                                form.codiceSelect.innerHTML = '';
+                                form.descrizioneSelect.innerHTML = '';
+                                veraOpzione.push(riga);
+                            } 
 
-                fetch('/caricaForm')
-                    .then(res => res.json())
-                    .then(righe => {
-                        const campo = righe.split(',');
-                        const form = document.getElementById('acquisto');
-                        form.ordine.value3edxcampo[1];
-                        form.articolo.value = campo[2];
+                            else {
+                                altreOpzioni.push(riga);
+                            }
+                        }
                     });
+
+                    campo = veraOpzione[0].split(',');
+                    const optionCodice = document.createElement('option');
+                    optionCodice.value = campo[3];
+                    optionCodice.textContent = campo[3];
+                    form.codiceSelect.appendChild(optionCodice);
+
+                    const optionDescrizione = document.createElement('option');
+                    optionDescrizione.value = campo[4];
+                    optionDescrizione.textContent = campo[4];
+                    form.descrizioneSelect.appendChild(optionDescrizione);
+
+                    
+
+                    altreOpzioni.forEach(riga => {
+                        const campo = riga.split(',');
+                        const optionCodice = document.createElement('option');
+                        optionCodice.value = campo[3]; // Codice
+                        optionCodice.textContent = campo[3]; // Descrizione
+                        form.codice.appendChild(optionCodice);
+
+                        const optionDescrizione = document.createElement('option');
+                        optionDescrizione.value = campo[4]; // Descrizione
+                        optionDescrizione.textContent = campo[4]; // Descrizione
+                        form.descrizione.appendChild(optionDescrizione);
+                    });
+                });
             }
 
         </script>

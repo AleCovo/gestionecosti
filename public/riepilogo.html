@@ -6,20 +6,18 @@
          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     </head>
     <body>
-        <h1>Riepilogo Spese</h1>
+        <button onclick="home()">Home</button>
+        <button onclick="scaricaExcelRiepilogo()">Export</button>
+        <h1>Riepilogo</h1>
         <table id="riepilogo-table">
             <thead>
                 <tr>
                     <th>Data</th>
-                    <th>Ordine</th>
-                    <th>Articolo</th>
                     <th>Codice</th>
                     <th>Descrizione</th>
                     <th>Costo (€)</th>
                     <th>Ricavo (€)</th>
-                    <th>Venduto</th>
                     <th>Guadagno (€)</th>
-                    <th>Mese</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,19 +36,65 @@
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${riga[0]}</td>
-                            <td>${riga[1]}</td>
-                            <td>${riga[2]}</td>
                             <td>${riga[3]}</td>
                             <td>${riga[4]}</td>
-                            <td>${riga[5]}</td>
+                            <td>${riga[5]} €</td>
                             <td>${riga[6]} €</td>
-                            <td>${riga[7]} </td>
-                            <td>${riga[8]} €</td>
-                            <td>${riga[9]}</td>
+                            <td>${riga[8]} €</td> 
                         `;
                         tbody.appendChild(tr);
                     });
                 });
+            
+            function home() {
+                window.location.href = '/';
+            }
+
+            function scaricaExcelRiepilogo() {
+                
+                try {
+                    const tabella = document.getElementById('riepilogo-table');
+                    let csvContent = "data:text/csv;charset=utf-8,";
+
+                    //Aggiungi intestazioni
+                    const intestazioni = tabella.querySelectorAll('thead th');
+                    let headerRow = [];
+
+                    intestazioni.forEach(intestazione => {
+                        headerRow.push(intestazione.innerText);
+                    });
+
+                    csvContent += headerRow.join(',') + "\r\n";
+
+                    //Aggiungi righe
+                    const righe = tabella.querySelectorAll('tbody tr');
+
+                    righe.forEach(riga => {
+                        let rowData = [];
+                        const celle = riga.querySelectorAll('td');
+                        celle.forEach(cella => {
+                            rowData.push(cella.innerText);
+                        });
+                        csvContent += rowData.join(',') + "\r\n";
+                    });
+
+
+                    //Crea un link per il download
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "riepilogo.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                } catch (error) {
+                    alert(error);
+                }
+                
+
+            }
+
         </script>
     </body>
 </html>
