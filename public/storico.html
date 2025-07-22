@@ -1,15 +1,15 @@
 <html>
     <head>
         <link rel="stylesheet" href="styles/styles.css">
-        <title>RIEPILOGO</title>
+        <title>Storico</title>
         <meta charset="UTF-8">
          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     </head>
     <body>
         <button onclick="home()">Home</button>
-        <button onclick="scaricaExcelRiepilogo()">Export</button>
-        <h1>Riepilogo</h1>
-        <table id="riepilogo-table">
+        <button onclick="scaricaExcelStorico()">Export</button>
+        <h1>STORICO</h1>
+        <table id="storico-table">
             <thead>
                 <tr>
                     <th>Data</th>
@@ -26,10 +26,10 @@
         </table>
 
         <script>
-            fetch('/riepilogo')
+            fetch('/storico')
                 .then(res => res.json())
                 .then(testo => {
-                    const tbody = document.querySelector('#riepilogo-table tbody');
+                    const tbody = document.querySelector('#storico-table tbody');
 
                     testo.forEach(riga => {
                         riga = riga.split(',');
@@ -50,10 +50,10 @@
                 window.location.href = '/';
             }
 
-            function scaricaExcelRiepilogo() {
-                
+            function scaricaExcelStorico() {
+
                 try {
-                    const tabella = document.getElementById('riepilogo-table');
+                    const tabella = document.getElementById('storico-table');
                     let csvContent = "data:text/csv;charset=utf-8,";
 
                     //Aggiungi intestazioni
@@ -83,7 +83,7 @@
                     const encodedUri = encodeURI(csvContent);
                     const link = document.createElement("a");
                     link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "riepilogo.csv");
+                    link.setAttribute("download", "storico.csv");
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

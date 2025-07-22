@@ -52,15 +52,7 @@ app.get('/', (req, res) => {
 
 app.get('/caricaForm', (req, res) => {
   const file = leggiFile(filePath);
-  const righe = file.split('\n');
-  let righeNonVendute = [];
-  righe.forEach((riga) => {
-    const campo = riga.split(',');
-    if (campo[7] === 'FALSO') {
-      righeNonVendute.push(riga + '\n');
-    }
-  });
-  res.json(righeNonVendute);
+  res.json(file);
 });
 
 app.get('/caricaSelezioneVendita', (req, res) => {
@@ -83,11 +75,11 @@ app.get('/pagAcquisto', (req, res) => {
 });
 
 
-app.get('/pagRiepilogo', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/riepilogo.html'));
+app.get('/pagStorico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/storico.html'));
 });
 
-app.get('/riepilogo', (req, res) => {
+app.get('/storico', (req, res) => {
   const file = leggiFile(filePath);
 
   const righe = file.split('\n');
@@ -184,7 +176,7 @@ app.post('/terminaAcquisto', (req, res) => {
   const riga = `\n${data},${veroOrdine},${veroArticolo},${codice},${descrizione},${costo},0,FALSO,0,${mese}`;
   fs.appendFile(filePath, riga, (err) => {
     if (err) return res.status(500).send('Errore nel salvataggio');
-    res.send('Dati salvati');
+    res.json(riga); // Invia la riga aggiunta come risposta
   });
 });
 

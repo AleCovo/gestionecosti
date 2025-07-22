@@ -6,7 +6,7 @@
          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     </head>
     <body >
-        <button style="margin-left: 43%;" onclick="pagRiepilogo()">Vedi riepilogo</button>
+        <button style="margin-left: 43%;" onclick="pagStorico()">Storico</button>
         <button onclick="caricaForm()">Carica Form</button>
         <br>
         <br>
@@ -82,21 +82,50 @@
         <script>
 
             document.addEventListener('DOMContentLoaded', function() {
-                const form = document.getElementById('vendita');
+                const formVendita = document.getElementById('vendita');
+                const formAcquisto = document.getElementById('acquisto');
+                let nuovoOrdine = '';
+
                 fetch('/caricaForm')
                     .then(res => res.json())
-                    .then(righeNonVendute => {
+                    .then(file => {
+                        const righe = file.split('\n');
+
+                        //Carica il form di acquisto con l'ultimo ordine
+                        let ultimoAcquisto = righe[righe.length - 1].split(',');
+                        nuovoOrdine = (parseInt(ultimoAcquisto[1]) + 1).toString();
+                        if (nuovoOrdine.length === 1) {
+                            nuovoOrdine = '00' + nuovoOrdine;
+                        }
+                        else if (nuovoOrdine.length === 2) {
+                            nuovoOrdine = '0' + nuovoOrdine;
+                        }
+                        else {
+                            nuovoOrdine = nuovoOrdine;
+                        }
+
+                        formAcquisto.ordine.value = nuovoOrdine;
+                        formAcquisto.articolo.value = '01';
+
+                        //Carica il form di vendita
+                        let righeNonVendute = [];
+                        righe.forEach((riga) => {
+                            const campo = riga.split(',');
+                            if (campo[7] === 'FALSO') {
+                            righeNonVendute.push(riga + '\n');
+                            }
+                        });
                         righeNonVendute.forEach(riga => {
                             const campo = riga.split(',');
                             const optionCodice = document.createElement('option');
                             optionCodice.value = campo[3]; // Codice
                             optionCodice.textContent = campo[3]; // Descrizione
-                            form.codice.appendChild(optionCodice);
+                            formVendita.codice.appendChild(optionCodice);
 
                             const optionDescrizione = document.createElement('option');
                             optionDescrizione.value = campo[4]; // Descrizione
                             optionDescrizione.textContent = campo[4]; // Descrizione
-                            form.descrizione.appendChild(optionDescrizione);
+                            formVendita.descrizione.appendChild(optionDescrizione);
                         });
                     });
             });
@@ -124,8 +153,14 @@
                     .then(aggiungiArticolo => {
                         const form = document.getElementById('acquisto');
                         form.ordine.value = aggiungiArticolo.veroOrdine;
-                        const veroArticolo = parseInt(aggiungiArticolo.veroArticolo) + 1;
-                        form.articolo.value = veroArticolo.toString();
+                        let articoloProgressivo = (parseInt(aggiungiArticolo.veroArticolo) + 1).toString();
+                        if (articoloProgressivo.length === 1) {
+                            articoloProgressivo = '0' + articoloProgressivo;
+                        }
+                        else {
+                            articoloProgressivo = articoloProgressivo;
+                        }
+                        form.articolo.value = articoloProgressivo;
 
                         form.data.value = '';
                         form.descrizione.value = '';
@@ -152,9 +187,24 @@
                     },
                     body: JSON.stringify({ data, ordine, articolo, descrizione, costo})
                 })
-                .then(res => res.text())
-                .then(msg => {
-                    document.getElementById('acquisto').reset();
+                .then(res => res.json())
+                .then(riga => {
+                    const form = document.getElementById('acquisto');
+                    riga = riga.split(',');
+                    let ordineProgressivo = (parseInt(riga[1]) + 1).toString();
+                    if (ordineProgressivo.length === 1) {
+                        ordineProgressivo = '00' + ordineProgressivo;
+                    }
+                    else if (ordineProgressivo.length === 2) {
+                        ordineProgressivo = '0' + ordineProgressivo;
+                    }
+                    form.ordine.value = ordineProgressivo;
+
+                    form.articolo.value = '01';
+
+                    form.data.value = '';
+                    form.descrizione.value = '';
+                    form.costo.value = '';
                 })
                 .catch(err => {
                     console.error(err);
@@ -188,8 +238,8 @@
                 });
             });
 
-            function pagRiepilogo(){
-                window.location.href = `/pagRiepilogo`;
+            function pagStorico(){
+                window.location.href = `/pagStorico`;
             }
 
             function caricaSelezioneVendita() {
