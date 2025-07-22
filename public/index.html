@@ -6,7 +6,7 @@
          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     </head>
     <body >
-        <button onclick="pagRiepilogo()">Vedi riepilogo</button>
+        <button style="margin-left: 43%;" onclick="pagRiepilogo()">Vedi riepilogo</button>
         <button onclick="caricaForm()">Carica Form</button>
         <br>
         <br>
@@ -126,7 +126,6 @@
                         form.ordine.value = aggiungiArticolo.veroOrdine;
                         const veroArticolo = parseInt(aggiungiArticolo.veroArticolo) + 1;
                         form.articolo.value = veroArticolo.toString();
-                        alert('Articolo aggiunto con successo');
 
                         form.data.value = '';
                         form.descrizione.value = '';
@@ -155,7 +154,6 @@
                 })
                 .then(res => res.text())
                 .then(msg => {
-                    alert(msg);
                     document.getElementById('acquisto').reset();
                 })
                 .catch(err => {
