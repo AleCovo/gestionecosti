@@ -1,27 +1,28 @@
-il codice deve diventare la concatenzione di anno-ordine-articolo
+FATTO    il codice deve diventare la concatenzione di anno-ordine-articolo
 
 
 aggiungere uno script di modifica righe sia per vendita che per costo (vendita ho già), cercare di farlo il più semplice possibile e se si riesce modificare il campo con un doppio click
 
+
 FATTO    rinominare riepilogo spese con riepilogo e poi togliere dalla vista ordine, articolo, mese e venduto
          quindi alla fine tenere data, codice, descrizione, costo, ricavo e guadagno
 
-aggiungere un bottone di download su exel
+FATTO	 aggiungere un bottone di download su exel
 
 
 migliorare la leggibilità da telefono, ingrandendo la schermata e spostando i 2 bottoni in alto al centro.
 
-Modificare il form di acquisto e vendita:
-guardando lo stamp  "FORM DI INSERIMENTO", 
+FATTO    Modificare il form di acquisto e vendita:
+	guardando lo stamp  "FORM DI INSERIMENTO", 
 
-il form di acquisto avrà:
+	il form di acquisto avrà:
 
-una data che se lasciata blank viene impostata come automatica oggi, altrimenti prende il valore inserito a mano
-un ordine blank
-un articolo, blank
-una descrizione
-un costo
-un pulsante più articoli che mi storicizza l'acquisto, mantiene i dati inseriti (aumenta l'articolo di uno) nel form ma sbianca descrizione e costo per nuovi inserimenti
+	una data che se lasciata blank viene impostata come automatica oggi, altrimenti prende il valore inserito a mano
+	un ordine blank
+	un articolo, blank
+	una descrizione
+	un costo
+	un pulsante più articoli che mi storicizza l'acquisto, mantiene i dati inseriti (aumenta l'articolo di uno) nel form ma sbianca descrizione e costo per nuovi inserimenti
 un pulsante termine acquisto per aggiungere l'utimo oggetto e sbiancare tutto il form
 
 
