@@ -41,13 +41,22 @@ file = leggiFile(filePath);
 
 righe = file.split('\n');
 
-
+app.use((req, res, next) => {
+  console.log('Richiesta a:', req.url);
+  next();
+});
 
 app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
 
-//lancia pagina principale
+//lancia pagina di login
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
+  res.sendFile(path.join(__dirname, 'public/login.html'));
+});
+
+
+//lancia pagina principale
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/home.html'));
 });
 
 app.get('/caricaForm', (req, res) => {
@@ -87,6 +96,43 @@ app.get('/storico', (req, res) => {
   res.json(righe); // Invia l'array con le righe lette dal file
 });
 
+
+app.post('/aggiornaRigaStorico', (req, res) => {
+  const codice = req.body.riga[1];
+  const campo = req.body.campo;
+  const valore = req.body.valore;
+  const file = leggiFile(filePath);
+  const righe = file.split('\n');
+
+  // Trova la riga corrispondente al codice
+  let rigaDaAggiornare = 0;
+  righe.forEach((riga, indice) => {
+    const campi = riga.split(',');
+    if (campi[3] === codice) {
+      rigaDaAggiornare = indice;
+    }
+  });
+
+  if (rigaDaAggiornare === -1) {
+    return res.status(404).send('Riga non trovata');
+  }
+
+  // Aggiorna il campo specificato
+  const campi = righe[rigaDaAggiornare].split(',');
+  const indiceCampo = ['data', 'ordine', 'articolo', 'codice', 'descrizione', 'costo', 'ricavo', 'guadagno', 'mese'].indexOf(campo);
+  if (indiceCampo === -1) {
+    return res.status(400).send('Campo non valido');
+  }
+
+  campi[indiceCampo] = valore;
+  righe[rigaDaAggiornare] = campi.join(',');
+
+  // Scrivi le righe aggiornate nel file
+  fs.writeFile(filePath, righe.join('\n'), (err) => {
+    if (err) return res.status(500).send('Errore nel salvataggio');
+    res.json({ codice, campo, valore });
+  });
+});
 
 //lancia l'API per aggiungere gli acquisti
 

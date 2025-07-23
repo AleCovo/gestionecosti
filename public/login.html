@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/styles.css">
+        <title>LOGIN</title>
+        <meta charset="UTF-8">
+    </head>
+    <body >
+        <h1>LOGIN</h1>
+        
+        <div id="login-container">
+            <form id="acquisto" action=""method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="utente">Utente:</label>
+                        <input type="text" id="utente" name="utente">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password">
+                    </div>
+                </div>
+                    
+                <div class="button-group">
+                    <button type="button" id="loginButton">Login</button>
+                </div>
+
+            </form>
+        </div>
+    </body>
+
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Previene il submit del form
+
+            const utente = document.getElementById('utente').value;
+            const password = document.getElementById('password').value;
+
+            if (utente === 'admin' && password === 'admin') {
+                window.location.href = '/home'; // Reindirizza alla pagina principale
+            } else {
+                alert('Credenziali non valide. Riprova.');
+            }
+        });
+    </script>
+</html>

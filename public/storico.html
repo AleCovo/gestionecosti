@@ -47,8 +47,60 @@
                 });
             
             function home() {
-                window.location.href = '/';
+                window.location.href = '/home';
             }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const table = document.getElementById('storico-table');
+                if (!table) return;
+
+                table.addEventListener('dblclick', function (e) {
+                    const cell = e.target;
+
+                    if (cell.tagName === 'TD') {
+                        const originalValue = cell.innerText;
+                        cell.setAttribute('contenteditable', true);
+                        cell.focus();
+
+                        const row = cell.closest('tr');
+
+                        cell.addEventListener('blur', () => {
+                            cell.removeAttribute('contenteditable');
+
+                            // Se il valore è cambiato
+                            if (cell.innerText.trim() !== originalValue.trim()) {
+                                const cells = row.querySelectorAll('td');
+                                const valori = Array.from(cells).map(td => td.innerText.trim());
+
+                                const rigaCsv = valori.join(',');
+
+                                const cleanRigaCsv = (rigaCsv) => {
+                                    return rigaCsv
+                                        .replace(/[€]/g, '')       // rimuove simbolo euro
+                                        .replace(/[' ']/g, '')     //Rimuovo manualmente gli spazi
+                                        .trim();
+                                };
+
+                                alert(cleanRigaCsv(rigaCsv));
+
+                                console.log('Riga CSV da inviare:', cleanRigaCsv(rigaCsv));
+
+                                // Invia la stringa al server
+                                fetch('/aggiornaRigaStorico', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ rigaCsv }),
+                                })
+                                .then(res => res.ok ? alert('Modifica salvata') : alert('Errore durante il salvataggio'))
+                                .catch(err => alert('Errore di rete: ' + err));
+                            }
+                        }, { once: true });
+                    }
+                });
+            });
+
 
             function scaricaExcelStorico() {
 

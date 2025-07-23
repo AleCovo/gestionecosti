@@ -29,7 +29,8 @@ form {
 /* Input fields */
 input[type="text"],
 input[type="date"],
-input[type="number"] {
+input[type="number"],
+input[type="password"] {
   width: 100%;
   padding: 0.75rem;
   margin: 0.5rem 0 1rem;
