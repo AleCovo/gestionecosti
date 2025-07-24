@@ -41,11 +41,6 @@ file = leggiFile(filePath);
 
 righe = file.split('\n');
 
-app.use((req, res, next) => {
-  console.log('Richiesta a:', req.url);
-  next();
-});
-
 app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
 
 //lancia pagina di login
