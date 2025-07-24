@@ -1,0 +1,378 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+  </head>
+  <body>
+
+      <button onclick="home()">Home</button>
+
+      <div class="form-container">
+
+        <div class="form-section">
+          <label><input type="checkbox" id="export-ordine" checked> Includi "UTILI PER ORDINE"</label>
+          <h2>UTILI PER ORDINE</h2>
+          <table id="tabella-ordine">
+            <thead>
+              <tr>
+                <th>Ordine</th>
+                <th>Guadagno</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="form-section">
+          <label><input type="checkbox" id="export-mensile" checked> Includi "UTILI MENSILI"</label>
+          <h2>UTILI MENSILI</h2>
+          <table id="tabella-mensile">
+            <thead>
+              <tr>
+                <th>Mese</th>
+                <th>Guadagno</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="form-section">
+          <label><input type="checkbox" id="export-magazzino" checked> Includi "MAGAZZINO"</label>
+          <h2>MAGAZZINO</h2>
+          <table id="tabella-magazzino">
+            <thead>
+              <tr>
+                <th>Descrizione</th>
+                <th>Costo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+    </div>
+
+    <div class="export-controls">
+      <button onclick="esportaSelezionati()">Export</button>
+    </div>
+
+    <script>
+      function esportaSelezionati() {
+        const wb = XLSX.utils.book_new();
+
+        if (document.getElementById('export-ordine').checked) {
+          const ws1 = XLSX.utils.table_to_sheet(document.getElementById('tabella-ordine'));
+          XLSX.utils.book_append_sheet(wb, ws1, "Ut. Ordine");
+        }
+
+        if (document.getElementById('export-mensile').checked) {
+          const ws2 = XLSX.utils.table_to_sheet(document.getElementById('tabella-mensile'));
+          XLSX.utils.book_append_sheet(wb, ws2, "Ut. Mensile");
+        }
+
+        if (document.getElementById('export-magazzino').checked) {
+          const ws3 = XLSX.utils.table_to_sheet(document.getElementById('tabella-magazzino'));
+          XLSX.utils.book_append_sheet(wb, ws3, "Magazzino");
+        }
+
+        XLSX.writeFile(wb, "report.xlsx");
+      }
+
+      // Esempio di popolamento dinamico
+      document.addEventListener('DOMContentLoaded', () => {
+
+        fetch('/storico')
+          .then(res => res.json())
+          .then(righe => {
+
+            //Popola la prima tabella "UTILI PER ORDINE"
+            let guadagnoTotale = 0;
+            const tbodyOrdine = document.querySelector('#tabella-ordine tbody');
+            righe.forEach(riga => {
+              riga = riga.split(',');
+              guadagnoTotale += parseInt(riga[8]);
+              
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[3]}</td><td>${riga[8]} €</td>`;
+              tbodyOrdine.appendChild(tr);
+            });
+            guadagnoTotale = guadagnoTotale.toString();
+            const trTotale = document.createElement('tr');
+            trTotale.style.fontWeight = 'bold';
+            trTotale.innerHTML = `<td>TOTALE</td><td>${guadagnoTotale} €</td>`;
+            tbodyOrdine.appendChild(trTotale);
+            
+            
+
+            let ordiniGennaio = [];
+            let ordiniFebbraio = [];
+            let ordiniMarzo = [];
+            let ordiniAprile = [];
+            let ordiniMaggio = [];
+            let ordiniGiugno = [];
+            let ordiniLuglio = [];
+            let ordiniAgosto = [];
+            let ordiniSettembre = [];
+            let ordiniOttobre = [];
+            let ordiniNovembre = [];
+            let ordiniDicembre = [];
+
+            let guadagnoGennaio = 0;
+            let guadagnoFebbraio = 0;
+            let guadagnoMarzo = 0;
+            let guadagnoAprile = 0;
+            let guadagnoMaggio = 0;
+            let guadagnoGiugno = 0;
+            let guadagnoLuglio = 0;
+            let guadagnoAgosto = 0;
+            let guadagnoSettembre = 0;
+            let guadagnoOttobre = 0;
+            let guadagnoNovembre = 0;
+            let guadagnoDicembre = 0;
+
+
+            righe.forEach(riga => {
+              campi = riga.split(',');
+              if (campi[0].includes('-01-')) {
+                ordiniGennaio.push(campi);
+                guadagnoGennaio += parseInt(campi[8]);
+              } else if (campi[0].includes('-02-')) {
+                ordiniFebbraio.push(campi);
+                guadagnoFebbraio += parseInt(campi[8]);
+              } else if (campi[0].includes('-03-')) {
+                ordiniMarzo.push(campi);
+                guadagnoMarzo += parseInt(campi[8]);
+              } else if (campi[0].includes('-04-')) {
+                ordiniAprile.push(campi);
+                guadagnoAprile += parseInt(campi[8]);
+              } else if (campi[0].includes('-05-')) {
+                ordiniMaggio.push(campi);
+                guadagnoMaggio += parseInt(campi[8]);
+              } else if (campi[0].includes('-06-')) {
+                ordiniGiugno.push(campi);
+                guadagnoGiugno += parseInt(campi[8]);
+              } else if (campi[0].includes('-07-')) {
+                ordiniLuglio.push(campi);
+                guadagnoLuglio += parseInt(campi[8]);
+              } else if (campi[0].includes('-08-')) {
+                ordiniAgosto.push(campi);
+                guadagnoAgosto += parseInt(campi[8]);
+              } else if (campi[0].includes('-09-')) {
+                ordiniSettembre.push(campi);
+                guadagnoSettembre += parseInt(campi[8]);
+              } else if (campi[0].includes('-10-')) {
+                ordiniOttobre.push(campi);
+                guadagnoOttobre += parseInt(campi[8]);
+              } else if (campi[0].includes('-11-')) {
+                ordiniNovembre.push(campi);
+                guadagnoNovembre += parseInt(campi[8]);
+              } else if (campi[0].includes('-12-')) {
+                ordiniDicembre.push(campi);
+                guadagnoDicembre += parseInt(campi[8]);
+              }
+            });
+
+            guadagnoGennaio = guadagnoGennaio.toString();
+            guadagnoFebbraio = guadagnoFebbraio.toString();
+            guadagnoMarzo = guadagnoMarzo.toString();
+            guadagnoAprile = guadagnoAprile.toString();
+            guadagnoMaggio = guadagnoMaggio.toString();
+            guadagnoGiugno = guadagnoGiugno.toString();
+            guadagnoLuglio = guadagnoLuglio.toString();
+            guadagnoAgosto = guadagnoAgosto.toString();
+            guadagnoSettembre = guadagnoSettembre.toString();
+            guadagnoOttobre = guadagnoOttobre.toString();
+            guadagnoNovembre = guadagnoNovembre.toString();
+            guadagnoDicembre = guadagnoDicembre.toString();
+
+
+            // Popola la tabella "UTILI MENSILI"
+
+            // Aggiungi il guadagno di Gennaio
+            const tbodyMensile = document.querySelector('#tabella-mensile tbody');
+            
+            const trGuadagnoGennaio = document.createElement('tr');
+            trGuadagnoGennaio.style.fontWeight = 'bold';
+            trGuadagnoGennaio.style.backgroundColor = "#00ffff";
+            trGuadagnoGennaio.innerHTML = `<td>Gennaio-25</td><td>${guadagnoGennaio}</td>`;
+            tbodyMensile.appendChild(trGuadagnoGennaio);
+            ordiniGennaio.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Febbraio
+            const trGuadagnoFebbraio = document.createElement('tr');
+            trGuadagnoFebbraio.style.fontWeight = 'bold';
+            trGuadagnoFebbraio.style.backgroundColor = "#00ffff";
+            trGuadagnoFebbraio.innerHTML = `<td>Febbraio-25</td><td>${guadagnoFebbraio}</td>`;
+            tbodyMensile.appendChild(trGuadagnoFebbraio);
+            ordiniFebbraio.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Marzo
+            const trGuadagnoMarzo = document.createElement('tr');
+            trGuadagnoMarzo.style.fontWeight = 'bold';
+            trGuadagnoMarzo.style.backgroundColor = "#00ffff";
+            trGuadagnoMarzo.innerHTML = `<td>Marzo-25</td><td>${guadagnoMarzo}</td>`;
+            tbodyMensile.appendChild(trGuadagnoMarzo);
+            ordiniMarzo.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Aprile
+            const trGuadagnoAprile = document.createElement('tr');
+            trGuadagnoAprile.style.fontWeight = 'bold';
+            trGuadagnoAprile.style.backgroundColor = "#00ffff";
+            trGuadagnoAprile.innerHTML = `<td>Aprile-25</td><td>${guadagnoAprile}</td>`;
+            tbodyMensile.appendChild(trGuadagnoAprile);
+            ordiniAprile.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Maggio
+            const trGuadagnoMaggio = document.createElement('tr');
+            trGuadagnoMaggio.style.fontWeight = 'bold';
+            trGuadagnoMaggio.style.backgroundColor = "#00ffff";
+            trGuadagnoMaggio.innerHTML = `<td>Maggio-25</td><td>${guadagnoMaggio}</td>`;
+            tbodyMensile.appendChild(trGuadagnoMaggio);
+            ordiniMaggio.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Giugno
+            const trGuadagnoGiugno = document.createElement('tr');
+            trGuadagnoGiugno.style.fontWeight = 'bold';
+            trGuadagnoGiugno.style.backgroundColor = "#00ffff";
+            trGuadagnoGiugno.innerHTML = `<td>Giugno-25</td><td>${guadagnoGiugno}</td>`;
+            tbodyMensile.appendChild(trGuadagnoGiugno);
+            ordiniGiugno.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Luglio
+            const trGuadagnoLuglio = document.createElement('tr');
+            trGuadagnoLuglio.style.fontWeight = 'bold';
+            trGuadagnoLuglio.style.backgroundColor = "#00ffff";
+            trGuadagnoLuglio.innerHTML = `<td>Luglio-25</td><td>${guadagnoLuglio}</td>`;
+            tbodyMensile.appendChild(trGuadagnoLuglio);
+            ordiniLuglio.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            
+
+            // Aggiungi il guadagno di Agosto
+            const trGuadagnoAgosto = document.createElement('tr');
+            trGuadagnoAgosto.style.fontWeight = 'bold';
+            trGuadagnoAgosto.style.backgroundColor = "#00ffff";
+            trGuadagnoAgosto.innerHTML = `<td>Agosto-25</td><td>${guadagnoAgosto}</td>`;
+            tbodyMensile.appendChild(trGuadagnoAgosto);
+            ordiniAgosto.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            
+
+            // Aggiungi il guadagno di Settembre
+            const trGuadagnoSettembre = document.createElement('tr');
+            trGuadagnoSettembre.style.fontWeight = 'bold';
+            trGuadagnoSettembre.style.backgroundColor = "#00ffff";
+            trGuadagnoSettembre.innerHTML = `<td>Settembre-25</td><td>${guadagnoSettembre}</td>`;
+            tbodyMensile.appendChild(trGuadagnoSettembre);
+            ordiniSettembre.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Ottobre
+            const trGuadagnoOttobre = document.createElement('tr');
+            trGuadagnoOttobre.style.fontWeight = 'bold';
+            trGuadagnoOttobre.style.backgroundColor = "#00ffff";
+            trGuadagnoOttobre.innerHTML = `<td>Ottobre-25</td><td>${guadagnoOttobre}</td>`;
+            tbodyMensile.appendChild(trGuadagnoOttobre);
+            ordiniOttobre.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Novembre
+            const trGuadagnoNovembre = document.createElement('tr');
+            trGuadagnoNovembre.style.fontWeight = 'bold';
+            trGuadagnoNovembre.style.backgroundColor = "#00ffff";
+            trGuadagnoNovembre.innerHTML = `<td>Novembre-25</td><td>${guadagnoNovembre}</td>`;
+            tbodyMensile.appendChild(trGuadagnoNovembre);
+            ordiniNovembre.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            // Aggiungi il guadagno di Dicembre
+            const trGuadagnoDicembre = document.createElement('tr');
+            trGuadagnoDicembre.style.fontWeight = 'bold';
+            trGuadagnoDicembre.style.backgroundColor = "#00ffff";
+            trGuadagnoDicembre.innerHTML = `<td>Dicembre-25</td><td>${guadagnoDicembre}</td>`;
+            tbodyMensile.appendChild(trGuadagnoDicembre);
+            ordiniDicembre.forEach(riga => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${riga[0]}</td><td>${riga[8]} €</td>`;
+              tbodyMensile.appendChild(tr);
+            });
+
+            
+
+            const trTotaleMesi = document.createElement('tr');
+            trTotaleMesi.innerHTML = `<td>Totale</td><td>${guadagnoTotale}</td>`;
+            trTotaleMesi.style.fontWeight = 'bold';
+            tbodyMensile.appendChild(trTotaleMesi);
+
+
+            const tbodyMagazzino = document.querySelector('#tabella-magazzino tbody');
+            let totaleMagazzino = 0;
+            righe.forEach(riga => {
+              riga = riga.split(',');
+              
+              if (riga[7] === 'FALSO'){
+                totaleMagazzino += parseInt(riga[5]);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${riga[4]}</td><td>${riga[5]} €</td>`;
+                tbodyMagazzino.appendChild(tr);
+              }
+            });
+            totaleMagazzino = totaleMagazzino.toString();
+            const trTotaleMagazzino = document.createElement('tr');
+            trTotaleMagazzino.style.fontWeight = 'bold';
+            trTotaleMagazzino.innerHTML = `<td>Totale</td><td>${totaleMagazzino} €</td>`;
+            tbodyMagazzino.appendChild(trTotaleMagazzino);
+
+
+          });
+      });
+
+      function home() {
+                window.location.href = '/home';
+      }
+
+    </script>
+  </body>
+</html>

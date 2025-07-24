@@ -286,3 +286,7 @@ app.post('/vendita', (req, res) => {
   fs.writeFileSync(filePath, nuovoFile, 'utf-8');
 
 });
+
+app.get('/pagTabelle', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/tabelle.html'));
+});

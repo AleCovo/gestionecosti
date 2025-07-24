@@ -99,6 +99,22 @@ tbody td {
   border-bottom: 1px solid #ddd;
 }
 
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-section {
+  flex: 1 1 30%;
+  min-width: 250px;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
 /* Responsive layout */
 @media (max-width: 600px) {
   form {

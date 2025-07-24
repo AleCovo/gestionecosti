@@ -7,7 +7,7 @@
     </head>
     <body >
         <button style="margin-left: 43%;" onclick="pagStorico()">Storico</button>
-        <button onclick="caricaForm()">Carica Form</button>
+        <button onclick="pagMagazzino()">Magazzino</button>
         <br>
         <br>
         <h1>Compra</h1>
@@ -301,6 +301,10 @@
                     });
                 });
             }
+
+            function pagMagazzino() {
+                window.location.href = `/pagTabelle`;
+            };
 
         </script>
     </body>
