@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
 const { text } = require('stream/consumers');
@@ -12,6 +13,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 //queste 2 righe servono per utilizzare il fetch
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//utilizza le sessioni per il login
+app.use(session({
+  secret: 'segretissimo', // cambia con un segreto sicuro
+  resave: false,
+  saveUninitialized: false
+}));
+
+
+
+function requireLogin(req, res, next) {
+  if (req.session && req.session.utenteLoggato) {
+    next(); // utente autenticato
+  } else {
+    res.redirect('/'); // utente non autenticato
+  }
+}
+
 
 function leggiFile(filePath) {
     const file = fs.readFileSync(filePath, 'utf-8');
@@ -49,10 +68,23 @@ app.get('/', (req, res) => {
 });
 
 
-//lancia pagina principale
-app.get('/home', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/home.html'));
+app.post('/login', (req, res) => {
+  const { utente, password } = req.body;
+
+  if (utente === 'admin' && password === 'admin') {
+    req.session.utenteLoggato = true;
+    res.redirect('/home'); // Redirect al frontend dopo login
+  } else {
+    res.status(401).send('Credenziali errate');
+  }
 });
+
+//lancia pagina principale
+app.get('/home', requireLogin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/home.html'));
+});
+
+
 
 app.get('/caricaForm', (req, res) => {
   const file = leggiFile(filePath);
@@ -79,7 +111,7 @@ app.get('/pagAcquisto', (req, res) => {
 });
 
 
-app.get('/pagStorico', (req, res) => {
+app.get('/pagStorico', requireLogin,(req, res) => {
   res.sendFile(path.join(__dirname, 'public/storico.html'));
 });
 
@@ -92,7 +124,7 @@ app.get('/storico', (req, res) => {
 });
 
 
-app.post('/aggiornaRigaStorico', (req, res) => {
+app.post('/aggiornaRigaStorico', requireLogin,(req, res) => {
   const codice = req.body.riga[1];
   const campo = req.body.campo;
   const valore = req.body.valore;
@@ -282,6 +314,6 @@ app.post('/vendita', (req, res) => {
 
 });
 
-app.get('/pagTabelle', (req, res) => {
+app.get('/pagTabelle', requireLogin,(req, res) => {
   res.sendFile(path.join(__dirname, 'public/tabelle.html'));
 });

@@ -35,11 +35,23 @@
             const utente = document.getElementById('utente').value;
             const password = document.getElementById('password').value;
 
-            if (utente === 'admin' && password === 'admin') {
-                window.location.href = '/home'; // Reindirizza alla pagina principale
-            } else {
-                alert('Credenziali non valide. Riprova.');
-            }
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ utente, password })
+            })
+            .then(res => {
+                if (res.redirected) {
+                    window.location.href = res.url;
+                } else {
+                    return res.text();
+                }
+            })
+            .then(msg => {
+                if (msg) alert(msg);
+            });
         });
     </script>
 </html>
