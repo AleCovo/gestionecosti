@@ -217,7 +217,8 @@
                 e.preventDefault();
                 // Recupera i dati dal form
 
-                const codice = document.getElementById('codiceSelect').value;
+                let codice = document.getElementById('codiceSelect').value;
+                let descrizione = document.getElementById('descrizioneSelect').value;
                 const ricavo = document.getElementById('ricavo').value;
 
                 // Invia i dati al server
@@ -231,12 +232,15 @@
                 .then(res => res.text())
                 .then(msg => {
                     alert(msg);
-                    document.getElementById('vendita').reset();
                 })
                 .catch(err => {
                     console.error(err);
                     alert('Errore nell\'invio dei dati');
                 });
+                document.getElementById('vendita').reset();
+                codice.innerHTML = '';
+                descrizione.innerHTML = '';
+
             });
 
             function pagStorico(){

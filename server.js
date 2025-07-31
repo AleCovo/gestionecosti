@@ -198,9 +198,11 @@ app.post('/aggiungiArticolo', (req, res) => {
   const costo = req.body.costo;
 
   const mese = estraiMeseAnno(data);
+
+  const ricavo = 0 - costo;
   
 
-  const riga = `\n${data},${veroOrdine},${veroArticolo},${codice},${descrizione},${costo},0,FALSO,0,${mese}`;
+  const riga = `\n${data},${veroOrdine},${veroArticolo},${codice},${descrizione},${costo},0,FALSO,${ricavo},${mese}`;
   fs.appendFile(filePath, riga, (err) => {
     if (err) return res.status(500).send('Errore nel salvataggio');
     const aggiungiArticolo = { veroOrdine, veroArticolo };
@@ -245,8 +247,10 @@ app.post('/terminaAcquisto', (req, res) => {
 
   const mese = estraiMeseAnno(data);
   
+  const ricavo = 0 - costo;
+  
 
-  const riga = `\n${data},${veroOrdine},${veroArticolo},${codice},${descrizione},${costo},0,FALSO,0,${mese}`;
+  const riga = `\n${data},${veroOrdine},${veroArticolo},${codice},${descrizione},${costo},0,FALSO,${ricavo},${mese}`;
   fs.appendFile(filePath, riga, (err) => {
     if (err) return res.status(500).send('Errore nel salvataggio');
     res.json(riga); // Invia la riga aggiunta come risposta
